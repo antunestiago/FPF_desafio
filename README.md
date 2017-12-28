@@ -12,7 +12,7 @@ get and Post, utilizando objetos json.
 
 A tela é bem intuitiva, apenas clicar nos botões.
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/antunestiago/FPF_desafio/blob/master/tela_principal.png)
 
 Neste repositorio existe tbm o dump do banco, caso seja necessário. 
 
