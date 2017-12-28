@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Produtos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+
+
+<body>
+    <div ng-app="productApp" ng-controller="productCtrl" class="container" ng-init="displayData()">
+        <hr>
+
+        <h2>Produtos</h2>
+        <hr>
+
+        <form>
+            <div class="form-group">
+                <label>Nome do Produto:</label>
+                <input type="text" class="form-control"  name="nome_produto" ng-model="nomeproduto">
+            </div>
+            <div class="form-group">
+                <label>Data do Produto:</label>
+                <input type="text" class="form-control"  name="data_produto" ng-model="dataproduto">
+            </div>
+
+
+            <button type="button" class="btn btn-default" value="submit" ng-click="insertData()">Adicionar Produto </button>
+        </form>
+
+        <hr>
+
+        <table class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th> Id Produto</th>
+                    <th> Nome Produto</th>
+                    <th> Data Produto</th>
+                    <th> Preco Produto</th>
+                    <th> Remover Produto</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr ng-repeat="item in items">
+                    <td>{{item.id_produto}}</td>
+                    <td>{{item.nome_produto}}</td>
+                    <td>{{item.data_produto}}</td>
+                    <td>{{item.preco_produto}}</td>
+                    <td><button ng-click="deleteData(item.id_produto)" class="btn btn-danger btn-xs"> Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+
+    <script>
+        var app = angular.module('productApp',[]);
+        app.controller('productCtrl',function ($scope,$http) {
+           $scope.insertData=function () {
+
+               $http.post("insert.php",{'nome_produto':$scope.nomeproduto,'data_produto':$scope.dataproduto}).success(function (data) {
+                   alert(data);
+                   console.log(data);
+                   console.log($scope.dataproduto);
+
+                   $scope.displayData();
+               });
+           }
+
+            $scope.displayData = function () {
+                $http.get("select.php")
+                    .success(function (data) {
+                        $scope.items = data;
+                        console.log(data);
+                    });
+            }
+            
+            $scope.deleteData=function (id) {
+                if (confirm("Certeza disso?")){
+                    $http.post("delete.php",{'id':id})
+                        .success(function (data) {
+                            console.log(id);
+                            alert(data);
+                            $scope.displayData();
+                        });
+                }
+                else{
+                    return false;
+                }
+            }
+        });
+    </script>
+
+
+
+</body>
+</html>
